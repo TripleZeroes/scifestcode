@@ -1,7 +1,9 @@
 import pygame
 import time
 import random
+from game import *
 
+# UI
 pygame.init()
 
 green = (0, 255, 100)
@@ -11,16 +13,23 @@ blue = (0, 0, 255)
 red = (255,0,0)
 aqua = (0, 255, 255)
 
+# instead of using new y/x as pixels, determine the new direction to send to the game
+
 new_y = 0
 new_x = 0
+
+# instead of pixels, use a row and column for the grid
 ypos = 20
 xpos = 20
 
+# UI
 dis_x = 500
 dis_y = 500
 
+# game data
 game_over = False
 
+# UI
 snake_block = 10
 snake_speed = 15
 
@@ -34,7 +43,10 @@ clock = pygame.time.Clock()
 
 font_style = pygame.font.SysFont("bahnschrift", 25)
 score_font = pygame.font.SysFont("comicsansms", 35)
- 
+
+
+
+
  
 def Your_score(score):
     value = score_font.render("Your Score: " + str(score), True, yellow)
@@ -42,8 +54,8 @@ def Your_score(score):
  
  
 def our_snake(snake_block, snake_list):
-  for x in snake_list:
-    pygame.draw.rect(dis, red, [x[0], x[1], snake_block, snake_block])
+  for pos in snake_list:
+    pygame.draw.rect(dis, red, [pos[0], pos[1], snake_block, snake_block])
 
 def message(msg, colour): 
   mesg = font_style.render(msg, True, colour)
@@ -132,7 +144,7 @@ def gameLoop():
         del snake_list[0]
 
     
- 
+ # is the head on another body part
     for x in snake_list[:-1]:
         if x == snake_head:
           game_close = True

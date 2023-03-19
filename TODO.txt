@@ -1,0 +1,20 @@
+create gameObject class
+    - contains logic for game state and actions
+    - update function with input
+        - take an action and update information
+        - return a game state (e.i. game over?) or just check the game state after an update?
+
+
+implement algorithm
+    -
+
+DONE I THINK
+- game data:
+        - grid where cells are: empty, snakehead, snakebody, apple
+            - NEAT input
+            - 2d array
+        - apple location
+        - snake data
+        - head
+        - direction
+            - NEAT input
