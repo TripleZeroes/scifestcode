@@ -22,7 +22,7 @@ dis_y = 500
 game_over = False
 
 snake_block = 10
-snake_speed = 30
+snake_speed = 15
 
 dis = pygame.display.set_mode((dis_x, dis_y))
 dis.fill(green)
@@ -69,18 +69,21 @@ def gameLoop():
 
     while game_close == True:
       dis.fill(aqua)
-      message("Q: quit, C: continue")
+      message("Q: quit, C: continue", green)
       Your_score(length_of_snake - 1)
 
       pygame.display.update()
 
       for event in pygame.event.get():
-        if pygame.event.type == pygame.KEYDOWN:
-          if event.type == pygame.K_q:
+        if event.type == pygame.KEYDOWN:
+          if event.key == pygame.K_q:
             game_over = True
             game_close = False
-          elif event.type == pygame.K_c:
+          elif event.key == pygame.K_c:
             gameLoop()
+        if event.type == pygame.QUIT:
+          game_over = True
+          game_close = False
 
           
     for event in pygame.event.get():
