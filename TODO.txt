@@ -1,5 +1,6 @@
 create gameObject class
     - contains logic for game state and actions
+    - use game state object with main game
     - update function with input
         - take an action and update information
         - return a game state (e.i. game over?) or just check the game state after an update?
@@ -7,6 +8,32 @@ create gameObject class
 
 implement algorithm
     -
+
+
+
+
+
+
+think of things i want in my presentation
+    -read about NEAT
+        write a page about it in booklet
+        touch on it in poster
+    -think of a way to document my progress
+    -how many generations to a good snake AI
+        over 20 score
+
+    -human data vs AI data
+        get people to play the game
+        figure out how many games people need to play
+        figure out how many generations the AI should get
+
+
+
+
+
+
+
+
 
 DONE I THINK
 - game data:
@@ -18,3 +45,4 @@ DONE I THINK
         - head
         - direction
             - NEAT input
+

@@ -32,7 +32,7 @@ game_over = False
 # UI
 snake_block = 10
 snake_speed = 15
-
+ 
 dis = pygame.display.set_mode((dis_x, dis_y))
 dis.fill(green)
 
@@ -47,45 +47,53 @@ score_font = pygame.font.SysFont("comicsansms", 35)
 
 
 
- 
+#UI but score is length of snake so it could be useful
 def Your_score(score):
     value = score_font.render("Your Score: " + str(score), True, yellow)
     dis.blit(value, [0, 0])
  
- 
+# still UI but snake_list is parts in snake  
 def our_snake(snake_block, snake_list):
   for pos in snake_list:
     pygame.draw.rect(dis, red, [pos[0], pos[1], snake_block, snake_block])
 
+# pure UI
 def message(msg, colour): 
   mesg = font_style.render(msg, True, colour)
   dis.blit(mesg, [dis_x/6, dis_y/2])
  
+
 def gameLoop():
+#game over is the ending quota but game close is UI
   game_over = False
   game_close = False
   
+# use locations
   xpos = dis_x/2
   ypos = dis_y/2
 
+# direction
   new_x = 0
   new_y = 0
 
+# game info
   snake_list=[]
   length_of_snake = 1
   
+# make a new apple
   foodx = round(random.randrange(0, dis_x - snake_block) / 10.0) * 10.0
   foody = round(random.randrange(0, dis_y - snake_block) / 10.0) * 10.
   
-  while not game_over:
 
+  while not game_over:
+#UI
     while game_close == True:
       dis.fill(aqua)
       message("Q: quit, C: continue", green)
       Your_score(length_of_snake - 1)
 
       pygame.display.update()
-
+#UI/ ending inputs, not useful for AI
       for event in pygame.event.get():
         if event.type == pygame.KEYDOWN:
           if event.key == pygame.K_q:
@@ -97,7 +105,7 @@ def gameLoop():
           game_over = True
           game_close = False
 
-          
+#Normal inputs, soon to be refactored      
     for event in pygame.event.get():
       if event.type == pygame.QUIT:
         game_over = True
@@ -127,15 +135,17 @@ def gameLoop():
             new_x = snake_block
             new_y = 0
   
-   
+# switch to locations, checks to see if head hits wall  
     if xpos >= dis_x or xpos < 0 or ypos >= dis_y or ypos < 0:
         game_close = True
-   
+
+# game tick things, mostly UI 
     ypos += new_y
     xpos += new_x
     dis.fill(white)
     
     pygame.draw.rect(dis, green, [foodx, foody, snake_block, snake_block])
+# snake head is useful? otherwise UI
     snake_head = []
     snake_head.append(xpos)
     snake_head.append(ypos)
@@ -148,14 +158,15 @@ def gameLoop():
     for x in snake_list[:-1]:
         if x == snake_head:
           game_close = True
- 
+
+# mostly UI, score is kinda useful
     our_snake(snake_block, snake_list)
     Your_score(length_of_snake - 1)
     
     pygame.draw.rect(dis, blue, [xpos, ypos, snake_block, snake_block])
     pygame.display.update()
 
-
+#check for eating food
     if xpos == foodx and ypos == foody:
         foodx = round(random.randrange(0, dis_x - snake_block) / 10.0) * 10.0
         foody = round(random.randrange(0, dis_y - snake_block) / 10.0) * 10.0
