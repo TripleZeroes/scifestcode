@@ -7,7 +7,7 @@ class GameState():
     grid = Grid(11, 11)
     snake = Snake(Location(5, 5))
     apple_loc = None
-
+    
     def __init__(self) -> None:
         self.create_new_apple()
         self.grid.update_cell(self.snake.head_loc, Cellstate.SNAKE_HEAD)
@@ -25,6 +25,10 @@ class GameState():
             for value in row:
                 print(value, end = " ")
             print("\n")
+    
+    def head_check(self):
+        if self.apple_loc == self.snake.head_loc:
+              create_new_apple()
 
 if __name__ == "__main__":
     game = GameState()
