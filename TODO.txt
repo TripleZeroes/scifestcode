@@ -10,7 +10,7 @@ implement algorithm
     -
 
 
-
+Make logic for opposite direction movement inputs when you have more than a head
 
 
 

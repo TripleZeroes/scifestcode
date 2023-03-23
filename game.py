@@ -4,10 +4,15 @@ from snake import *
 
 
 class GameState():
-    grid = Grid(11, 11)
-    snake = Snake(Location(5, 5))
+    grid = Grid(51, 51)
+    snake = Snake(Location(25, 25))
     apple_loc = None
-    
+    is_game_over = False
+
+    @property
+    def score(self):
+        return len(self.snake.body)
+
     def __init__(self) -> None:
         self.create_new_apple()
         self.grid.update_cell(self.snake.head_loc, Cellstate.SNAKE_HEAD)
@@ -53,6 +58,12 @@ class GameState():
         self.grid.update_cell(self.snake.head_loc, Cellstate.EMPTY)
         movements[self.snake.direction]()
         self.grid.update_cell(self.snake.head_loc, Cellstate.SNAKE_HEAD)
+
+    def game_over(self):
+        if self.snake.head_loc.row > self.grid.row_num - 1:
+            self.is_game_over = True
+        if self.snake.head_loc.col > self.grid.col_num - 1:
+            self.is_game_over = True
 
 
     def pront(self):
