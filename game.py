@@ -1,11 +1,12 @@
+import math
 import random
 from grid import *
 from snake import *
 
 
-class GameState():
-    grid = Grid(51, 51)
-    snake = Snake(Location(25, 25))
+class GameState(): 
+    grid: Grid
+    snake: Snake
     apple_loc = None
     is_game_over = False
 
@@ -13,7 +14,9 @@ class GameState():
     def score(self):
         return len(self.snake.body)
 
-    def __init__(self) -> None:
+    def __init__(self, row_num, col_num) -> None:
+        self.grid = Grid(row_num, col_num)
+        self.snake = Snake(Location(math.floor(row_num/2), math.floor(col_num/2)))
         self.create_new_apple()
         self.grid.update_cell(self.snake.head_loc, Cellstate.SNAKE_HEAD)
         self.grid.update_cell(self.apple_loc, Cellstate.APPLE)
@@ -57,12 +60,19 @@ class GameState():
 
         self.grid.update_cell(self.snake.head_loc, Cellstate.EMPTY)
         movements[self.snake.direction]()
-        self.grid.update_cell(self.snake.head_loc, Cellstate.SNAKE_HEAD)
+        self.game_over()
+        if not self.is_game_over:
+            self.grid.update_cell(self.snake.head_loc, Cellstate.SNAKE_HEAD)
 
     def game_over(self):
         if self.snake.head_loc.row > self.grid.row_num - 1:
             self.is_game_over = True
         if self.snake.head_loc.col > self.grid.col_num - 1:
+            self.is_game_over = True
+
+        if self.snake.head_loc.row < 0:
+            self.is_game_over = True
+        if self.snake.head_loc.col < 0:
             self.is_game_over = True
 
 

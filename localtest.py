@@ -6,8 +6,8 @@ from game import *
 # UI
 pygame.init()
 
-
-game = GameState()
+COL_NUM = 51
+ROW_NUM = 51
 
 green = (0, 255, 100)
 white = (255, 255, 255)
@@ -19,13 +19,9 @@ aqua = (0, 255, 255)
 # UI
 snake_block = 10
 
-dis_x = game.grid.col_num * snake_block
-dis_y = game.grid.row_num * snake_block
+dis_x = COL_NUM * snake_block
+dis_y = ROW_NUM * snake_block
 
-# game data
-game_over = False
-
-# UI
 snake_speed = 15
 
 
@@ -57,54 +53,57 @@ def message(msg, colour):
   dis.blit(mesg, [dis_x/6, dis_y/2])
  
 
+def checkGameClose(game):
+  while True:
+    dis.fill(aqua)
+    message("Q: quit, C: continue", green)
+    Your_score(game)
+
+    pygame.display.update()
+    #UI/ ending inputs, not useful for AI
+    for event in pygame.event.get():
+      if event.type == pygame.KEYDOWN:
+        if event.key == pygame.K_q:
+          return True
+        elif event.key == pygame.K_c:
+          return False
+      if event.type == pygame.QUIT:
+        return True
+
 def gameLoop():
-  global game 
-#game over is the ending quota but game close is UI
-  game_over = False
-  
+  game = GameState(ROW_NUM, COL_NUM) 
 
-  while not game_over:
-#UI
-    while game.is_game_over == True:
-      dis.fill(aqua)
-      message("Q: quit, C: continue", green)
-      Your_score(game)
-
-      pygame.display.update()
-#UI/ ending inputs, not useful for AI
-      for event in pygame.event.get():
-        if event.type == pygame.KEYDOWN:
-          if event.key == pygame.K_q:
-            game_over = True
-            game = GameState()
-          elif event.key == pygame.K_c:
-            gameLoop()
-        if event.type == pygame.QUIT:
-          game_over = True
-          game = GameState()
-
-#Normal inputs, soon to be refactored      
+  while not game.is_game_over:
+    input_given = False
+    #Normal inputs, soon to be refactored      
     for event in pygame.event.get():
       if event.type == pygame.QUIT:
-        game_over = True
+        pygame.quit()
+        quit()
       if event.type == pygame.KEYDOWN:
         if event.key == pygame.K_UP:
           game.update(Directions.UP) 
-
+          input_given = True
         elif event.key == pygame.K_LEFT:
           game.update(Directions.LEFT)  
+          input_given = True
 
         elif event.key == pygame.K_DOWN:
           game.update(Directions.DOWN)   
+          input_given = True
 
         elif event.key == pygame.K_RIGHT:
           game.update(Directions.RIGHT)   
+          input_given = True
 
-# game tick things, mostly UI 
+    if not input_given:
+      game.update(Directions.NONE)
+
+    # game tick things, mostly UI 
     dis.fill(white)
     
     pygame.draw.rect(dis, green, [game.apple_loc.col * snake_block, game.apple_loc.row * snake_block, snake_block, snake_block])
-# snake head is useful? otherwise UI
+    # snake head is useful? otherwise UI
     # snake_head = []
     # snake_head.append(xpos)
     # snake_head.append(ypos)
@@ -113,27 +112,33 @@ def gameLoop():
     #     del snake_list[0]
 
     
- # is the head on another body part
+    # is the head on another body part
     # for x in snake_list[:-1]:
     #     if x == snake_head:
     #       game_close = True
 
-# mostly UI, score is kinda useful
+    # mostly UI, score is kinda useful
     our_snake(game)
     Your_score(game)
     
     pygame.draw.rect(dis, blue, [game.snake.head_loc.col * snake_block, game.snake.head_loc.row * snake_block, snake_block, snake_block])
     pygame.display.update()
 
-#check for eating food
+  #check for eating food
     # if xpos == foodx and ypos == foody:
     #     foodx = round(random.randrange(0, dis_x - snake_block) / 10.0) * 10.0
     #     foody = round(random.randrange(0, dis_y - snake_block) / 10.0) * 10.0
     #     length_of_snake += 1
-    
+    #if not input_given:
     clock.tick(snake_speed)
+  return game  
 
-    
+def mainLoop():
+  game_close = False
+  while not game_close:
+    game = gameLoop() 
+    game_close = checkGameClose(game)
   pygame.quit()
   quit()
-gameLoop()
+     
+mainLoop()
