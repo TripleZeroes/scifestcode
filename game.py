@@ -31,49 +31,38 @@ class GameState():
         # if none, move in same direction
         if new_input == Directions.NONE:
             new_direction = self.snake.direction
-        # else, move in new direction 
         else:
+            # else, move in new direction 
             new_direction = new_input
+
+        if len(self.snake.body) > 0 and Directions.opposites[new_direction] == self.snake.direction:
+            new_direction = self.snake.direction
         
-        self.snake.direction = new_direction
-        if self.snake.direction == Directions.NONE:
-            return
 
-        def move_up():
-            self.snake.head_loc.row -= 1
-
-        def move_down():
-            self.snake.head_loc.row += 1
-
-        def move_left():
-            self.snake.head_loc.col -= 1
-
-        def move_right():
-            self.snake.head_loc.col += 1
-
-        movements = {
-            Directions.UP: move_up,
-            Directions.DOWN: move_down,
-            Directions.LEFT: move_left,
-            Directions.RIGHT: move_right,
-        }
-
-        self.grid.update_cell(self.snake.head_loc, Cellstate.EMPTY)
-        movements[self.snake.direction]()
+        
+        last_body = self.snake.shift_snake(new_direction)
+        if last_body is not None:
+            self.grid.update_cell(last_body, Cellstate.EMPTY)
         self.game_over()
+        self.head_check()
         if not self.is_game_over:
             self.grid.update_cell(self.snake.head_loc, Cellstate.SNAKE_HEAD)
 
     def game_over(self):
+        #edges
         if self.snake.head_loc.row > self.grid.row_num - 1:
             self.is_game_over = True
         if self.snake.head_loc.col > self.grid.col_num - 1:
             self.is_game_over = True
-
         if self.snake.head_loc.row < 0:
             self.is_game_over = True
         if self.snake.head_loc.col < 0:
             self.is_game_over = True
+        #head hits body
+        for location in self.snake.body:
+            if location == self.snake.head_loc:
+                self.is_game_over = True
+                break
 
 
     def pront(self):
@@ -93,6 +82,7 @@ class GameState():
     def head_check(self):
         if self.apple_loc == self.snake.head_loc:
             self.create_new_apple()
+            self.snake.should_grow = True
 
 if __name__ == "__main__":
     import os

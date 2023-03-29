@@ -45,7 +45,7 @@ def Your_score(game):
 # still UI but snake_list is parts in snake  
 def our_snake(game):
   for pos in game.snake.body:
-    pygame.draw.rect(dis, red, [pos.row * snake_block, pos.col * snake_block, snake_block, snake_block])
+    pygame.draw.rect(dis, red, [pos.col * snake_block, pos.row * snake_block, snake_block, snake_block])
 
 # pure UI
 def message(msg, colour): 
@@ -104,18 +104,8 @@ def gameLoop():
     
     pygame.draw.rect(dis, green, [game.apple_loc.col * snake_block, game.apple_loc.row * snake_block, snake_block, snake_block])
     # snake head is useful? otherwise UI
-    # snake_head = []
-    # snake_head.append(xpos)
-    # snake_head.append(ypos)
-    # snake_list.append(snake_head)
-    # if len(snake_list) > length_of_snake:
-    #     del snake_list[0]
 
-    
-    # is the head on another body part
-    # for x in snake_list[:-1]:
-    #     if x == snake_head:
-    #       game_close = True
+
 
     # mostly UI, score is kinda useful
     our_snake(game)

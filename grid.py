@@ -5,12 +5,20 @@ class Cellstate():
     EMPTY = 3
 
 class Location():
-  row = 0
-  col = 0
+    row = 0
+    col = 0
 
-  def __init__(self, row, col) -> None:
-    self.row = row
-    self.col = col
+    def __init__(self, row, col) -> None:
+        self.row = row
+        self.col = col
+
+    def __eq__(self, other):
+        if not isinstance(other, Location):
+            return NotImplemented
+        
+        return self.row == other.row and self.col == other.col
+
+
 
 class Grid():
     col_num = None
