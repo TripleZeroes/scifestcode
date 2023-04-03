@@ -15,6 +15,7 @@ yellow = (255, 255, 102)
 blue = (0, 0, 255)
 red = (255,0,0)
 aqua = (0, 255, 255)
+black = (0, 0, 0)
 
 # UI
 snake_block = 10
@@ -39,7 +40,7 @@ score_font = pygame.font.SysFont("comicsansms", 35)
 
 #UI but score is length of snake so it could be useful
 def Your_score(game):
-    value = score_font.render("Your Score: " + str(game.score), True, yellow)
+    value = score_font.render("Your Score: " + str(game.score), True, black)
     dis.blit(value, [0, 0])
  
 # still UI but snake_list is parts in snake  

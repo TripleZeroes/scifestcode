@@ -1,48 +1,14 @@
-create gameObject class
-    - contains logic for game state and actions
-    - use game state object with main game
-    - update function with input
-        - take an action and update information
-        - return a game state (e.i. game over?) or just check the game state after an update?
+only length_of_snake 
+length_of_snake + duration: so that AI is encouraged to last longer
+length_of_snake * 10 + duration: apple eating is heavily encouraged
+length_of_snake * 100 + duration: apple eating is VERY heavily encouraged and genomes were zig-zagging back and forth to increase duration smh
+length_of_snake * 100 + duration - amount of opposite movements: this heavily discouraged the back-tracking for duration
+length_of_snake * 100 + duration - amount of opposite movements + amount of direction changes * 0.5: this is meant to give the AI a little push in the direction of wanting to move more
 
+next test ;)
+    mean_distance = statistics.mean(distances)
+    new_distance_score = (1/mean_distance) * 20
+    genome.fitness = (self.game.score * 100) + duration - amount_of_retakes + (new_directions * 0.5) + new_distance_score
 
-implement algorithm
-    -
-
-
-Make logic for opposite direction movement inputs when you have more than a head
-
-
-
-think of things i want in my presentation
-    -read about NEAT
-        write a page about it in booklet
-        touch on it in poster
-    -think of a way to document my progress
-    -how many generations to a good snake AI
-        over 20 score
-
-    -human data vs AI data
-        get people to play the game
-        figure out how many games people need to play
-        figure out how many generations the AI should get
-
-
-
-
-
-
-
-
-
-DONE I THINK
-- game data:
-        - grid where cells are: empty, snakehead, snakebody, apple
-            - NEAT input
-            - 2d array
-        - apple location
-        - snake data
-        - head
-        - direction
-            - NEAT input
-
+TODO
+    negate point gain if AI ate apple through lazyness
