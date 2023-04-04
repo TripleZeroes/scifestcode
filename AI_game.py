@@ -66,7 +66,9 @@ class AI_Game:
     first_checked = False
     amount_of_retakes = 0
     new_directions = 0
+    ai_score = 1
     distances = []
+    move_penalty = 0
     while not self.game.is_game_over:
       #Normal inputs, soon to be refactored      
       for event in pygame.event.get():
@@ -81,8 +83,12 @@ class AI_Game:
 
       if decision == Directions.opposites[self.game.snake.direction]:
         amount_of_retakes += 1
+        if amount_of_retakes >= 20:
+          move_penalty = 1000
+          break
       elif decision != Directions.NONE and decision != self.game.snake.direction:
           new_directions += 1
+      
 
 
       self.game.update(decision)
@@ -124,7 +130,11 @@ class AI_Game:
     duration = time.time() - start_time
 
     mean_distance = statistics.mean(distances)
-
     new_distance_score = (1/mean_distance) * 20
+    
+    ai_score = self.game.score
 
-    genome.fitness = (self.game.score * 100) + duration - amount_of_retakes + (new_directions * 0.5) + new_distance_score
+    if ai_score == 1 and new_directions == 1:
+        ai_score = 0
+
+    genome.fitness = (ai_score * 100) + duration - amount_of_retakes + (new_directions * 0.5) + new_distance_score - move_penalty

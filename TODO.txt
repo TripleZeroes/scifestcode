@@ -10,5 +10,11 @@ next test ;)
     new_distance_score = (1/mean_distance) * 20
     genome.fitness = (self.game.score * 100) + duration - amount_of_retakes + (new_directions * 0.5) + new_distance_score
 
+    triangulation dis from apple
+
+negated point gain if AI ate apple through lazyness
+greatly penalized zig zagging back and forth
+
 TODO
-    negate point gain if AI ate apple through lazyness
+better encourage movement towards apple
+better promote movement 
