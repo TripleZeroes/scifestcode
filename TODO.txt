@@ -15,6 +15,9 @@ next test ;)
 negated point gain if AI ate apple through lazyness
 greatly penalized zig zagging back and forth
 
-TODO
-better encourage movement towards apple
-better promote movement 
+changed movement buff to * 1.5: better promote movement 
+changed apple triangulation to factor in starting distance: better encourage movement towards apple
+
+
+
+

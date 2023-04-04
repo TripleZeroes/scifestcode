@@ -129,12 +129,12 @@ class AI_Game:
       
     duration = time.time() - start_time
 
-    mean_distance = statistics.mean(distances)
-    new_distance_score = (1/mean_distance) * 20
+    mean_distance = distances[0] - statistics.mean(distances)  
+    new_distance_score = (1/(mean_distance if mean_distance != 0 else 1)) * 20
     
     ai_score = self.game.score
 
     if ai_score == 1 and new_directions == 1:
         ai_score = 0
 
-    genome.fitness = (ai_score * 100) + duration - amount_of_retakes + (new_directions * 0.5) + new_distance_score - move_penalty
+    genome.fitness = (ai_score * 100) + duration - amount_of_retakes + (new_directions * 1.5) + new_distance_score - move_penalty
