@@ -17,15 +17,26 @@ class GameState():
     def __init__(self, row_num, col_num) -> None:
         self.grid = Grid(row_num, col_num)
         self.snake = Snake(Location(math.floor(row_num/2), math.floor(col_num/2)))
-        self.create_new_apple()
+        apple_locs = [
+            Location(math.floor(.25 * row_num), math.floor(.25 * col_num)),
+            Location(math.floor(.25 * row_num), math.floor(.75 * col_num)),
+            Location(math.floor(.75 * row_num), math.floor(.25 * col_num)),
+            Location(math.floor(.75 * row_num), math.floor(.75 * col_num)),
+        ]
+        self.apple_loc = apple_locs[random.randrange(0, len(apple_locs))]
         self.grid.update_cell(self.snake.head_loc, Cellstate.SNAKE_HEAD)
         self.grid.update_cell(self.apple_loc, Cellstate.APPLE)
 
 
     def create_new_apple(self):
-        apple_row = random.randrange(0, self.grid.row_num)
-        apple_col = random.randrange(0, self.grid.col_num)
-        self.apple_loc = Location(apple_row, apple_col)
+        empty = []
+        for row in range(self.grid.row_num):
+            for col in range(self.grid.col_num):
+                if self.grid.cells[row][col] == Cellstate.EMPTY:
+                    empty.append(Location(row, col))
+        index = random.randrange(0, len(empty))
+        new_loc = empty[index]
+        self.apple_loc = new_loc
 
     def update(self, new_input):
         # if none, move in same direction

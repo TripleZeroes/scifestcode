@@ -62,29 +62,57 @@ class AI_Game:
     max_score = 150
     max_time = 60
 
-  
+    previous_distance_from_apple = math.sqrt(math.pow(self.game.snake.head_loc.row - self.game.apple_loc.row, 2) +
+                                      math.pow(self.game.snake.head_loc.col - self.game.apple_loc.col, 2))
     first_checked = False
     amount_of_retakes = 0
     new_directions = 0
     ai_score = 1
-    distances = []
-    move_penalty = 0
+    first_apple_points = 0
+    ticks = -1
     while not self.game.is_game_over:
+      ticks += 1
       #Normal inputs, soon to be refactored      
       for event in pygame.event.get():
         if event.type == pygame.QUIT:
           pygame.quit()
           quit()
 
-      input = [j for sub in self.game.grid.cells for j in sub]
-      input.append(self.game.snake.direction)
+      distance_from_apple = math.sqrt(math.pow(self.game.snake.head_loc.row - self.game.apple_loc.row, 2) +
+                                      math.pow(self.game.snake.head_loc.col - self.game.apple_loc.col, 2))
+      if previous_distance_from_apple > distance_from_apple:
+        first_apple_points += 10/distance_from_apple
+      else:
+        first_apple_points -= (10 - (10/distance_from_apple))
+      #first_apple_points += (1/distance_from_apple) * (1 if previous_distance_from_apple > distance_from_apple else -1)
+      previous_distance_from_apple = distance_from_apple
+
+      cell_num = AI_Game.ROW_NUM * AI_Game.COL_NUM
+      empty_cell_num = cell_num - 2 - self.game.score # 2 for head and apple
+      input = [0] * empty_cell_num * 2 # row and col of empty grids
+      for loc in reversed(self.game.snake.body):
+        input.append(loc.row)
+        input.append(loc.col)
+      input.append(self.game.snake.head_loc.row)
+      input.append(self.game.snake.head_loc.col)
+      input.append(self.game.apple_loc.row)
+      input.append(self.game.apple_loc.col)
+      input.append(AI_Game.ROW_NUM - self.game.snake.head_loc.row)
+      input.append(AI_Game.COL_NUM - self.game.snake.head_loc.col)
+      input.append(10 if self.game.snake.direction == Directions.UP else 0)
+      input.append(10 if self.game.snake.direction == Directions.DOWN else 0)
+      input.append(10 if self.game.snake.direction == Directions.LEFT else 0)
+      input.append(10 if self.game.snake.direction == Directions.RIGHT else 0)
+      input.append(distance_from_apple)
+      input.append(self.game.snake.head_loc.row - self.game.apple_loc.row)
+      input.append(self.game.snake.head_loc.col - self.game.apple_loc.col)
+      input.append(amount_of_retakes)
       output = net.activate(input)
       decision = output.index(max(output))
 
       if decision == Directions.opposites[self.game.snake.direction]:
         amount_of_retakes += 1
-        if amount_of_retakes >= 20:
-          move_penalty = 1000
+        if amount_of_retakes >= 50:
           break
       elif decision != Directions.NONE and decision != self.game.snake.direction:
           new_directions += 1
@@ -92,10 +120,6 @@ class AI_Game:
 
 
       self.game.update(decision)
-
-      distance_from_apple = math.sqrt(math.pow(self.game.snake.head_loc.row - self.game.apple_loc.row, 2) +
-                                      math.pow(self.game.snake.head_loc.col - self.game.apple_loc.col, 2))
-      distances.append(distance_from_apple)
 
       if first_checked == False:
         if decision == 0:
@@ -129,12 +153,13 @@ class AI_Game:
       
     duration = time.time() - start_time
 
-    mean_distance = distances[0] - statistics.mean(distances)  
-    new_distance_score = (1/(mean_distance if mean_distance != 0 else 1)) * 20
+    new_distance_score = first_apple_points #if self.game.score == 0 else 0
     
     ai_score = self.game.score
 
     if ai_score == 1 and new_directions == 1:
         ai_score = 0
+    
+    new_directions -= 2
 
-    genome.fitness = (ai_score * 100) + duration - amount_of_retakes + (new_directions * 1.5) + new_distance_score - move_penalty
+    genome.fitness = (ai_score * 100) - amount_of_retakes + new_distance_score

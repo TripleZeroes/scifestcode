@@ -1,22 +1,24 @@
-only length_of_snake 
-length_of_snake + duration: so that AI is encouraged to last longer
-length_of_snake * 10 + duration: apple eating is heavily encouraged
-length_of_snake * 100 + duration: apple eating is VERY heavily encouraged and genomes were zig-zagging back and forth to increase duration smh
-length_of_snake * 100 + duration - amount of opposite movements: this heavily discouraged the back-tracking for duration
-length_of_snake * 100 + duration - amount of opposite movements + amount of direction changes * 0.5: this is meant to give the AI a little push in the direction of wanting to move more
+1. only length of snake
 
-next test ;)
-    mean_distance = statistics.mean(distances)
-    new_distance_score = (1/mean_distance) * 20
-    genome.fitness = (self.game.score * 100) + duration - amount_of_retakes + (new_directions * 0.5) + new_distance_score
+2. factored in the duration of the game
 
-    triangulation dis from apple
+3. started multiplying the length of snake by 10 to encourage apple eating
 
-negated point gain if AI ate apple through lazyness
-greatly penalized zig zagging back and forth
+4. started multiplying the length of snake by 100 to heavily encourage apple eating
 
-changed movement buff to * 1.5: better promote movement 
-changed apple triangulation to factor in starting distance: better encourage movement towards apple
+5. the AI was zig-zagging back and forth to increase game duration so I took points away for every move that was a zig-zag
+
+6. gave points for each movement
+
+7. started triangulating the distance from the apple and giving points based on how close/far the snake was from it 
+
+8. sometimes the AI would run into an apple even though it only made one move so I got rid of points given if the AI had only made one move
+
+9. the AI was still zig-zagging so it lost a large amount of points if it zig-zagged at all
+
+10. I modified the points given with new movements to encourage moving more
+
+11. changed apple distance points to factor in starting distance, this gave even more points if the AI got closer to the apple
 
 
 
